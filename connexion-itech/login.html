@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <title>I-tech Login Form</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1.0, shrink-to-fit=no" />
+  <meta name="description" content="" />
+
+  <link rel="stylesheet" href="./css/css-form.css" />
+</head>
+
+<body class="cnx-content">
+  <div class="cnx-content-top">
+    <img class="content-top-img float-right" src="./img/itech.png" width="110" />
+    <img class="content-top-img" src="./img/ISAE.png" width="110" />
+  </div>
+  <div class="cnx-content-bottom">
+    <h1 class="form-title">Connexion</h1>
+    <form action="#" method="POST" class="form cnx">
+      <div class="form-field">
+        <label for="user">
+          <img src="./img/user.png" width="30" /><span class="hidden">Identifiant</span>
+        </label>
+        <input id="user" type="text" name="user" class="form-input" placeholder="Identifiant" required="" onkeyup="verif_champ();" onchange="verif_champ();" />
+      </div>
+      
+      <div class="form-field">
+        <input id="paswd" type="password" name="paswd" class="form-input" placeholder="Mot de passe" required="" readonly="readonly" />
+        <label for="paswd" class="lbl-pwd">
+          <button type="button" id="btn-clear" class="cnx-hide" onclick="btn_clear();">
+            <img title="Effacer le mot de passe" src="./img/gomme.png" id="btn" name="btn" />
+          </button>
+          <img src="./img/lock.png" width="30" /><span class="hidden">Mot de passe</span>
+        </label>
+      </div>
+
+      <input type="hidden" id="key_Txt" name="key_Txt" readonly="readonly" value="" class="form-control" />
+      <input type="hidden" required="" id="pasw_key" name="pasw_key" value="" />
+
+      <div id="nbr-field" class="cnx-hide">
+        <div class="row">
+          <div id="cnx-nbrs"></div>
+        </div>
+      </div>
+
+      <div class="form-field">
+        <input class="cnx-btn-connecter" type="submit" name="send_txt" id="send_txt" value="AUTHENTIFICATION" disabled />
+      </div>
+    </form>
+  </div>
+</body>
+<script src="js/jquery.min.js"></script>
+<script src="js/functions.min.js"></script>
+<script type="text/javascript">
+  $(document).ready(function () {
+    $("#send_txt").click(function () {
+      $.ajax({
+        type: "POST",
+        dataType: "json",
+        data: $("form").serialize(),
+        url: "check_user_key.php",
+      }).done(function (data) {
+        if (data.key0 == "OK") {
+          var param = {
+            input1: data.key2,
+            input2: data.key3,
+            input3: data.key4,
+          };
+          OpenWindowWithPost(data.key1, "", "NewFile", param);
+          $("form").submit();
+        } else {
+          alert(
+            "L'authentification a échoué. Informations d'identification invalides.Si vous n´arrivez pas à vous connecter, Merci de contacter le service gestion."
+          );
+        }
+      });
+    });
+  });
+</script>
+
+</html>
